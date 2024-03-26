@@ -5,16 +5,20 @@ import App from "./App";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
-import Layout from "./components/layouts/layout";
+import Products from "./pages/Products";
+import Modal from "./components/modal";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App />} />
-        </Routes>
-      </BrowserRouter>
+      <Modal>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/products" element={<Products />} />
+          </Routes>
+        </BrowserRouter>
+      </Modal>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

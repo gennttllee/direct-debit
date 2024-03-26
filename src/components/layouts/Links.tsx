@@ -13,7 +13,7 @@ const Links = () => {
           pathname === "/" &&
           "bg-[#EBF8FE] text-primary border-r-[3px] border-primary"
         } `}
-        to="/dashboard"
+        to="/"
       >
         <Grid3 size="22" />
         <span className="">Dashboard</span>
@@ -25,12 +25,16 @@ const Links = () => {
         <Grid3 size="22" />
         <span className="text-black">Businesses</span>
       </Link>
-      <div
-        className={`flex gap-2 mb-[10px] items-center   py-3 pl-2 rounded-2xl`}
+      <Link
+        className={`flex gap-1 md:gap-2 mb-[10px] items-center } py-3 pl-2 rounded-md   ${
+          pathname === "/products" &&
+          "bg-[#EBF8FE] text-primary border-r-[3px] border-primary"
+        } `}
+        to="/products"
       >
         <Grid3 size="22" />
         <span className="">Products</span>
-      </div>
+      </Link>
       <Link
         className={`flex gap-2 mb-[10px] items-center } py-3 pl-2 rounded-2xl`}
         to="/"

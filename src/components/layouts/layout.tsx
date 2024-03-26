@@ -16,8 +16,8 @@ const Layout = ({ children }: children) => {
       className={`bg-grad bg-cover bg-blend-lighten bg-[#ffffff3c] bg-right flex w-full h-screen`}
     >
       <Sidebar />
-      <section className="w-full md:w-[75%] lg:w-[80%] xl:w-[83%] shrink-0 overflow-y-auto">
-        {children}
+      <section className="w-full md:w-[75%] lg:w-[80%] xl:w-[83%] overflow-y-auto">
+        <section className="w-[97%] mx-auto">{children}</section>
       </section>
       {nav && <MobileNav />}
     </section>
