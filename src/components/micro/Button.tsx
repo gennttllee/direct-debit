@@ -15,7 +15,7 @@ const Button = ({ title, icon, loading, onClick }: data) => {
   return (
     <button
       disabled={loading}
-      className={` transition-all rounded-lg hover:bg-[#0556ac] duration-500 block py-4 w-full  ${
+      className={` transition-all rounded-lg hover:bg-[#0556ac] duration-500 block py-3 w-full  ${
         loading ? "bg-[#80808036] text-black" : "text-white bg-primary"
       }`}
       onClick={onClick}

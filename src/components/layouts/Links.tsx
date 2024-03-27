@@ -19,8 +19,11 @@ const Links = () => {
         <span className="">Dashboard</span>
       </Link>
       <Link
-        className={`flex gap-1 md:gap-2 mb-[10px] } items-center py-3 pl-2 whitespace-nowrap rounded-2xl`}
-        to="/"
+        className={`flex gap-1 md:gap-2 mb-[10px] items-center } py-3 pl-2 rounded-md   ${
+          pathname === "/business" &&
+          "bg-[#EBF8FE] text-primary border-r-[3px] border-primary"
+        } `}
+        to="/business"
       >
         <Grid3 size="22" />
         <span className="text-black">Businesses</span>

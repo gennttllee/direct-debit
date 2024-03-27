@@ -66,3 +66,72 @@ export const history = [
     clientId: "123ddhdhdhHUM",
   },
 ];
+
+export const businessHistory = [
+  {
+    status: "active",
+    businessCode: "654-3245",
+    business: "Quantum Corp",
+    products: 154,
+  },
+  {
+    status: "active",
+    businessCode: "654-3245",
+    business: "Quantum Corp",
+    products: 154,
+  },
+  {
+    status: "active",
+    businessCode: "654-3245",
+    business: "Quantum Corp",
+    products: 154,
+  },
+  {
+    status: "active",
+    businessCode: "654-3245",
+    business: "Quantum Corp",
+    products: 154,
+  },
+  {
+    status: "active",
+    businessCode: "654-3245",
+    business: "Quantum Corp",
+    products: 154,
+  },
+  {
+    status: "active",
+    businessCode: "654-3245",
+    business: "Quantum Corp",
+    products: 154,
+  },
+  {
+    status: "active",
+    businessCode: "654-3245",
+    business: "Quantum Corp",
+    products: 154,
+  },
+  {
+    status: "active",
+    businessCode: "654-3245",
+    business: "Quantum Corp",
+    products: 154,
+  },
+  {
+    status: "inactive",
+    businessCode: "654-3245",
+    business: "Quantum Corp",
+    products: 154,
+  },
+  {
+    status: "active",
+    businessCode: "654-3245",
+    business: "Quantum Corp",
+    products: 154,
+  },
+  {
+    status: "inactive",
+    businessCode: "654-3245",
+    business: "Quantum Corp",
+    products: 154,
+  },
+];

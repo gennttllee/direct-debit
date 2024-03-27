@@ -6,6 +6,8 @@ import { faArrowLeft, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { goBack } from "../../store/slice/modalSlice";
 import AddProduct from "./AddProduct";
 import ExportData from "./ExportData";
+import EditBusiness from "./EditBusiness";
+import AddBusiness from "./AddBusiness";
 
 const modals = [
   {
@@ -15,6 +17,14 @@ const modals = [
   {
     name: "exportData",
     component: <ExportData />,
+  },
+  {
+    name: "editBusiness",
+    component: <EditBusiness />,
+  },
+  {
+    name: "addBusiness",
+    component: <AddBusiness />,
   },
 ];
 
