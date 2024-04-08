@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/layouts/layout";
 import { ExportSquare, SearchNormal1 } from "iconsax-react";
 import { useDispatch } from "react-redux";
-import { businessHistory, history } from "../data";
+import { businessHistory } from "../data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircle,
   faEllipsisVertical,
 } from "@fortawesome/free-solid-svg-icons";
 import { openModal } from "../store/slice/modalSlice";
+import { useGetBusinessesQuery } from "../store/services/api";
 
 const Business = () => {
+  const { data, isSuccess, isError, error } = useGetBusinessesQuery("");
   const dispatch = useDispatch();
   const currentD = new Date();
   const year = currentD.getFullYear();
@@ -22,9 +24,18 @@ const Business = () => {
     to: formattedDate,
   });
 
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(data, "data");
+    }
+    if (isError) {
+      console.log(error, "errror");
+    }
+  }, [data, error, isError, isSuccess]);
+
   const categories = ["all", "active", "inactive"];
 
-  const addBusiness = () => {
+  const addBusiness = async () => {
     dispatch(
       openModal({
         variant: "custom",

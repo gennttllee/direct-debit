@@ -14,22 +14,8 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["product", "vendor"],
+  tagTypes: ["business"],
   endpoints: (build) => ({
-    login: build.mutation({
-      query: (args) => ({
-        url: "auth/vendors/login",
-        method: "POST",
-        body: args,
-      }),
-    }),
-    signUp: build.mutation({
-      query: (args) => ({
-        url: "vendors",
-        method: "POST",
-        body: args,
-      }),
-    }),
     verifyEmail: build.mutation({
       query: (args) => ({
         url: "vendors/verify/email/",
@@ -37,14 +23,13 @@ export const api = createApi({
         body: args,
       }),
     }),
-    updatePassword: build.mutation({
-      query: ({ email, otp, password }) => ({
-        url: `vendors/reset/password/email/${email}`,
-        method: "PATCH",
-        body: { otp, password },
+    getBusinesses: build.query({
+      query: (args) => ({
+        url: "businesses",
       }),
+      providesTags: ["business"],
     }),
   }),
 });
 
-export const {} = api;
+export const { useGetBusinessesQuery } = api;
