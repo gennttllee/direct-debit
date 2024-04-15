@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'CustomFont';
+    src: url('/src//assets//fonts/AvertaDemo-ExtraBoldItalic.otf') format('otf'),
+        url('/src//assets//fonts/AvertaDemo-Regular.otf') format('otf'),
+}
+
+body {
+    font-family: 'CustomFont', sans-serif;
+}

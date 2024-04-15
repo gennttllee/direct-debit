@@ -1,25 +1,11 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit";
 import { api } from "../services/api";
 import Cookies from "js-cookie";
+import { token } from "../../data";
 
 const user = {
   id: nanoid(),
   avatar: "/assets/user.png",
-};
-
-type tempo = {
-  email: string;
-  id: string;
-  phone: string;
-  isVendorBusinessInfoComplete: boolean;
-  token: string;
-};
-
-type user = {
-  email: string;
-  id: string;
-  phone: string;
-  isVendorBusinessInfoComplete: boolean;
 };
 
 export const authSlice = createSlice({
@@ -27,9 +13,7 @@ export const authSlice = createSlice({
   initialState: {
     authenticated: false,
     user: user as null | typeof user,
-    token: Cookies.get("token") || "",
-    loading: true,
-    nav: false,
+    token: Cookies.get("token") || token,
   },
   reducers: {
     loginUser(state, action) {
@@ -44,10 +28,7 @@ export const authSlice = createSlice({
       sessionStorage.clear();
       Cookies.remove("token");
     },
-    setNav(state, action) {
-      state.nav = action.payload;
-    },
   },
 });
 
-export const { loginUser, logout, setNav } = authSlice.actions;
+export const { loginUser, logout } = authSlice.actions;

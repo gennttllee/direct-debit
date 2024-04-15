@@ -1,14 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../components/layouts/layout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
 import { history } from "../data";
-import { ExportSquare, SearchNormal1 } from "iconsax-react";
+import {
+  ArrowLeft2,
+  ArrowRight2,
+  ExportSquare,
+  SearchNormal1,
+} from "iconsax-react";
 import { useDispatch } from "react-redux";
 import { openModal } from "../store/slice/modalSlice";
+import { useGetClientsQuery } from "../store/services/api";
+import TableLoader from "../components/loaders/TableLoader";
 
 const Products = () => {
   const dispatch = useDispatch();
+  const [products, setProducts] = useState({
+    content: [] as typeof history,
+    count: 0,
+    pageNumber: 0,
+    pageSize: 10,
+    totalPages: 0,
+  });
+  const { isSuccess, data, isLoading, isFetching } = useGetClientsQuery({
+    pageNumber: products.pageNumber,
+    pageSize: products.pageSize,
+  });
   const currentD = new Date();
   const year = currentD.getFullYear();
   const month = String(currentD.getMonth() + 1).padStart(2, "0");
@@ -18,6 +36,12 @@ const Products = () => {
     from: formattedDate,
     to: formattedDate,
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      setProducts(data?.body);
+    }
+  }, [data, isSuccess]);
 
   const categories = ["all", "active", "inactive"];
 
@@ -43,6 +67,27 @@ const Products = () => {
         },
       })
     );
+  };
+
+  const editProd = (prod: (typeof history)[0]) => {
+    dispatch(
+      openModal({
+        variant: "custom",
+        custom: {
+          name: "editProduct",
+          sendData: prod,
+          proceed: () => {},
+        },
+      })
+    );
+  };
+
+  const nextPage = () => {
+    setProducts({ ...products, pageNumber: products.pageNumber + 1 });
+  };
+
+  const previousPage = () => {
+    setProducts({ ...products, pageNumber: products.pageNumber - 1 });
   };
 
   return (
@@ -140,32 +185,66 @@ const Products = () => {
               </p>
               <p className=" text-[#808080] w-[1rem] md:w-[10%] py-2"></p>
             </div>
-            {history.map((his, index) => (
-              <div
-                key={index}
-                className="flex cursor-pointer hover:bg-hoverColor justify-between py-2 px-[1rem] text-[10px] md:text-[12px] lg:text-[14px] border-b  text-secondary items-center"
-              >
-                <p className="w-[25%] md:w-[20%]  shrink-0 ">{his.product}</p>
-                <p className="w-[10%] md:w-[10%]  shrink-0">{his.business}</p>
-                <p className="w-[10%] md:w-[15%] shrink-0 capitalize">
-                  {his.clientId}
-                </p>
-                <p
-                  className={`w-fit shrink-0 r capitalize px-[10px] p-[5px] flex items-center border rounded-lg ${
-                    his.status === "active"
-                      ? "bg-[#bef2b941] border-[#BEF2B9] text-[green]"
-                      : "bg-[#f4b7b557] text-[#A4251A] border-[#F4B7B5]"
-                  }`}
+            {isLoading || isFetching ? (
+              <TableLoader line={15} />
+            ) : (
+              products?.content?.map((his, index) => (
+                <div
+                  key={index}
+                  className="flex cursor-pointer hover:bg-hoverColor justify-between py-2 px-[1rem] text-[10px] md:text-[12px] lg:text-[14px] border-b  text-secondary items-center"
                 >
-                  <FontAwesomeIcon
-                    className="text-[8px] mr-[10px]"
-                    icon={faCircle}
-                  />
-                  {his.status}
-                </p>
-                <p className="w-fit shrink-0 text-primary md:w-[10%]">Edit</p>
+                  <p className="w-[25%] md:w-[20%]  shrink-0 ">{his?.name}</p>
+                  <p className="w-[10%] md:w-[10%]  shrink-0">
+                    {his?.businessId}
+                  </p>
+                  <p className="w-[10%] md:w-[15%] shrink-0 capitalize">
+                    {his?.passportId}
+                  </p>
+                  <p
+                    className={`w-fit shrink-0 r capitalize px-[10px] p-[5px] flex items-center border rounded-lg ${
+                      his?.active
+                        ? "bg-[#bef2b941] border-[#BEF2B9] text-[green]"
+                        : "bg-[#f4b7b557] text-[#A4251A] border-[#F4B7B5]"
+                    }`}
+                  >
+                    <FontAwesomeIcon
+                      className="text-[8px] mr-[10px]"
+                      icon={faCircle}
+                    />
+                    {his.active ? "Active" : "Inactive"}
+                  </p>
+                  <button
+                    onClick={() => editProd(his)}
+                    className="w-fit shrink-0 text-primary md:w-[10%]"
+                  >
+                    Edit
+                  </button>
+                </div>
+              ))
+            )}
+            <div className="flex px-[1rem] mt-3 justify-between items-center">
+              <p>{products?.count} results found</p>
+              <div className="flex gap-2 justify-between w-[30%]">
+                <p className="text-primary">Rows per page: 10</p>
+                <div className="flex gap-3 items-center">
+                  <p className="mr-[2rem]">
+                    {products?.pageNumber} of {products?.totalPages}
+                  </p>
+                  <button
+                    disabled={products?.pageNumber === 1}
+                    onClick={previousPage}
+                  >
+                    <ArrowLeft2 size="22" />
+                  </button>
+                  <button
+                    disabled={products?.pageNumber === products?.totalPages}
+                    onClick={nextPage}
+                  >
+                    <ArrowRight2 size="22" />
+                  </button>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </div>

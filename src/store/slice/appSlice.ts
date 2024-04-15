@@ -1,32 +1,20 @@
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { businessHistory } from "../../data";
 
 export const appSlice = createSlice({
   name: "app",
   initialState: {
-    skip: false,
     nav: false,
-    withdraw: {
-      amount: 0,
-      bank: { bankName: "", accountNumber: 0, accountName: "" },
-    },
+    business: {} as (typeof businessHistory)[0],
   },
   reducers: {
     setNav(state, action) {
       state.nav = action.payload;
     },
-    getWithdrawal(state, action) {
-      switch (action.payload.type) {
-        case "amount":
-          state.withdraw.amount = action.payload.payload;
-          break;
-        case "bank":
-          state.withdraw.bank = action.payload.payload;
-          break;
-        default:
-          break;
-      }
+    getBusiness(state, action: { payload: (typeof businessHistory)[0] }) {
+      state.business = action.payload;
     },
   },
 });
 
-export const { setNav, getWithdrawal } = appSlice.actions;
+export const { setNav, getBusiness } = appSlice.actions;

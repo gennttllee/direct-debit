@@ -10,10 +10,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { openModal } from "../store/slice/modalSlice";
 import { useGetBusinessesQuery } from "../store/services/api";
+import TableLoader from "../components/loaders/TableLoader";
 
 const Business = () => {
-  const { data, isSuccess, isError, error } = useGetBusinessesQuery("");
+  const { data, isLoading, isSuccess } = useGetBusinessesQuery("");
+  const [business, setBusiness] = useState<typeof businessHistory>([]);
   const dispatch = useDispatch();
+  const categories = ["all", "active", "inactive"];
   const currentD = new Date();
   const year = currentD.getFullYear();
   const month = String(currentD.getMonth() + 1).padStart(2, "0");
@@ -26,14 +29,9 @@ const Business = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log(data, "data");
+      setBusiness(data);
     }
-    if (isError) {
-      console.log(error, "errror");
-    }
-  }, [data, error, isError, isSuccess]);
-
-  const categories = ["all", "active", "inactive"];
+  }, [data, isSuccess]);
 
   const addBusiness = async () => {
     dispatch(
@@ -59,12 +57,13 @@ const Business = () => {
     );
   };
 
-  const editBusiness = () => {
+  const editBusiness = (biz: (typeof businessHistory)[0]) => {
     dispatch(
       openModal({
         variant: "custom",
         custom: {
           name: "editBusiness",
+          sendData: biz,
           proceed: () => {},
         },
       })
@@ -159,46 +158,50 @@ const Business = () => {
                 Business Code
               </p>
               <p className=" text-center md:text-left text-[#808080] w-[10%] md:w-[15%] shrink-0 py-2">
-                No. of Products
+                No. Of Products
               </p>
               <p className=" text-[#808080] w-fit py-2 px-[17px] p-[5px]">
                 Status
               </p>
               <p className=" text-[#808080] w-[1rem] md:w-[10%] py-2"></p>
             </div>
-            {businessHistory.map((his, index) => (
-              <div
-                key={index}
-                className="flex cursor-pointer hover:bg-hoverColor justify-between py-2 px-[1rem] text-[10px] md:text-[12px] lg:text-[14px] border-b  text-secondary items-center"
-              >
-                <p className="w-[25%] md:w-[15%]  shrink-0 ">{his.business}</p>
-                <p className="w-[10%] md:w-[15%]  shrink-0">
-                  {his.businessCode}
-                </p>
-                <p className="w-[10%] md:w-[15%] shrink-0 capitalize">
-                  {his.products}
-                </p>
-                <p
-                  className={`w-fit shrink-0 r capitalize px-[10px] p-[5px] flex items-center border rounded-lg ${
-                    his.status === "active"
-                      ? "bg-[#bef2b941] border-[#BEF2B9] text-[green]"
-                      : "bg-[#f4b7b557] text-[#A4251A] border-[#F4B7B5]"
-                  }`}
-                >
-                  <FontAwesomeIcon
-                    className="text-[8px] mr-[10px]"
-                    icon={faCircle}
-                  />
-                  {his.status}
-                </p>
-                <button
-                  onClick={editBusiness}
-                  className="w-fit shrink-0 text-black md:w-[10%]"
-                >
-                  <FontAwesomeIcon icon={faEllipsisVertical} />
-                </button>
-              </div>
-            ))}
+            {isLoading ? (
+              <TableLoader line={15} />
+            ) : (
+              business?.map(
+                (his: (typeof businessHistory)[0], index: number) => (
+                  <div
+                    key={index}
+                    className="flex cursor-pointer hover:bg-hoverColor justify-between py-2 px-[1rem] text-[10px] md:text-[12px] lg:text-[14px] border-b  text-secondary items-center"
+                  >
+                    <p className="w-[25%] md:w-[15%]  shrink-0 ">{his?.name}</p>
+                    <p className="w-[10%] md:w-[15%]  shrink-0">{his?.code}</p>
+                    <p className="w-[10%] md:w-[15%] shrink-0 capitalize">
+                      Not set
+                    </p>
+                    <p
+                      className={`w-fit shrink-0 r capitalize px-[10px] p-[5px] flex items-center border rounded-lg ${
+                        his?.active
+                          ? "bg-[#bef2b941] border-[#BEF2B9] text-[green]"
+                          : "bg-[#f4b7b557] text-[#A4251A] border-[#F4B7B5]"
+                      }`}
+                    >
+                      <FontAwesomeIcon
+                        className="text-[8px] mr-[10px]"
+                        icon={faCircle}
+                      />
+                      {his?.active ? "Active" : "Inactive"}
+                    </p>
+                    <button
+                      onClick={() => editBusiness(his)}
+                      className="w-fit shrink-0 text-black md:w-[10%]"
+                    >
+                      <FontAwesomeIcon icon={faEllipsisVertical} />
+                    </button>
+                  </div>
+                )
+              )
+            )}
           </div>
         </div>
       </div>

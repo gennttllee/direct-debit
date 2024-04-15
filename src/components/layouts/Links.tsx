@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-
-import { Grid3 } from "iconsax-react";
+import { PiApertureLight } from "react-icons/pi";
+import { Building, Grid3 } from "iconsax-react";
 
 const Links = () => {
   const location = useLocation();
@@ -25,7 +25,7 @@ const Links = () => {
         } `}
         to="/business"
       >
-        <Grid3 size="22" />
+        <Building size="22" />
         <span className="text-black">Businesses</span>
       </Link>
       <Link
@@ -35,10 +35,10 @@ const Links = () => {
         } `}
         to="/products"
       >
-        <Grid3 size="22" />
+        <PiApertureLight size={22} />
         <span className="">Products</span>
       </Link>
-      <Link
+      {/* <Link
         className={`flex gap-2 mb-[10px] items-center } py-3 pl-2 rounded-2xl`}
         to="/"
       >
@@ -52,7 +52,7 @@ const Links = () => {
       >
         <Grid3 size="22" />
         <span>Reports</span>
-      </Link>
+      </Link> */}
     </div>
   );
 };

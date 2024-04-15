@@ -2,27 +2,24 @@ import { configureStore } from "@reduxjs/toolkit";
 import { api } from "./services/api";
 import { authSlice } from "./slice/authSlice";
 import { appSlice } from "./slice/appSlice";
-import { settingsSlice } from "./slice/settingsSlice";
 import { alertSlice } from "./slice/alertSlice";
 import { modalSlice } from "./slice/modalSlice";
+import thunk from "redux-thunk";
 
 const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
     auth: authSlice.reducer,
     app: appSlice.reducer,
-    settings: settingsSlice.reducer,
     alert: alertSlice.reducer,
     modal: modalSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware),
+  middleware: [api.middleware, thunk],
 });
 
 export const actions = {
   auth: authSlice.actions,
   app: appSlice.actions,
-  settings: settingsSlice.actions,
   alert: alertSlice.actions,
   modal: modalSlice.actions,
 };

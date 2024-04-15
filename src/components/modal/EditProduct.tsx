@@ -2,31 +2,36 @@ import React, { useState } from "react";
 import Input from "../micro/Input";
 import Button from "../micro/Button";
 import {
-  useAddClientsMutation,
+  useEditClientsMutation,
   useGetBusinessesQuery,
 } from "../../store/services/api";
 import { businessHistory } from "../../data";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { closeModal } from "../../store/slice/modalSlice";
 import { toast } from "../../store/slice/alertSlice";
+import { RootState } from "../../store";
 
-const AddProduct = () => {
+const EditProduct = () => {
   const dispatch = useDispatch();
+  const { custom, singleRoute } = useSelector(
+    (state: RootState) => state.modal
+  );
+  const route = custom.find((cus) => cus.name === singleRoute);
   const [loading, setLoading] = useState(false);
   const { data, isLoading } = useGetBusinessesQuery("");
-  const [addClient] = useAddClientsMutation();
+  const [editClient] = useEditClientsMutation();
   const [formData, setFormData] = useState({
-    businessId: "",
-    name: "",
-    code: "",
-    passportId: "",
-    active: true,
+    businessId: route?.sendData.businessId,
+    name: route?.sendData.name,
+    code: route?.sendData.code,
+    passportId: route?.sendData.passportId,
+    active: route?.sendData.active,
   });
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    addClient(formData).then((res: any) => {
+    editClient({ formData, id: route?.sendData.id }).then((res: any) => {
       setLoading(false);
       if (res.error) {
         dispatch(
@@ -35,19 +40,22 @@ const AddProduct = () => {
             message:
               res?.error?.data?.responseMessage ||
               res?.error?.data?.data ||
+              res?.error?.data?.error ||
               "error",
           })
         );
         return;
       }
-      dispatch(toast({ variant: "success", message: "successfully created" }));
+      dispatch(
+        toast({ variant: "success", message: "Changes saved successfully" })
+      );
       dispatch(closeModal());
     });
   };
 
   return (
     <form onSubmit={submitForm}>
-      <h3 className="font-medium text-[20px] mb-6">Add Product</h3>
+      <h3 className="font-medium text-[20px] mb-6">Edit Product</h3>
       <div className="mb-4">
         <label className="mb-1 block">Select Business</label>
         <select
@@ -123,9 +131,9 @@ const AddProduct = () => {
         </div>
       </div>
 
-      <Button loading={loading} title="Setup Product" />
+      <Button loading={loading} title="Save Changes" />
     </form>
   );
 };
 
-export default AddProduct;
+export default EditProduct;

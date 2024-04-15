@@ -24,7 +24,8 @@ type payload = {
     };
     custom?: {
       name: string;
-      proceed: (
+      sendData?: any;
+      proceed?: (
         loading: boolean,
         setLoading: React.Dispatch<React.SetStateAction<boolean>>,
         data: any
@@ -55,7 +56,8 @@ type dialog = {
 
 type custom = {
   name: string;
-  proceed: (
+  sendData?: any;
+  proceed?: (
     loading: boolean,
     setLoading: React.Dispatch<React.SetStateAction<boolean>>,
     data: any
@@ -88,7 +90,7 @@ export const modalSlice = createSlice({
           if (action.payload.custom) {
             const old = state.custom.find(
               (cus) =>
-                cus?.name?.toLowerCase() ==
+                cus?.name?.toLowerCase() ===
                 action.payload.custom?.name.toLowerCase()
             );
             if (old) {

@@ -3,9 +3,19 @@ import Layout from "./components/layouts/layout";
 import { history } from "./data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import { useGetClientsQuery } from "./store/services/api";
+import { useDispatch } from "react-redux";
+import { openModal } from "./store/slice/modalSlice";
+import TableLoader from "./components/loaders/TableLoader";
 
 function App() {
   const currentD = new Date();
+  const dispatch = useDispatch();
+  const { data, isLoading } = useGetClientsQuery({
+    pageSise: 10,
+    pageNumber: 1,
+  });
+
   const year = currentD.getFullYear();
   const month = String(currentD.getMonth() + 1).padStart(2, "0");
   const day = String(currentD.getDate()).padStart(2, "0");
@@ -14,6 +24,19 @@ function App() {
     from: formattedDate,
     to: formattedDate,
   });
+
+  const editProd = (prod: (typeof history)[0]) => {
+    dispatch(
+      openModal({
+        variant: "custom",
+        custom: {
+          name: "editProduct",
+          sendData: prod,
+          proceed: () => {},
+        },
+      })
+    );
+  };
 
   return (
     <Layout>
@@ -62,32 +85,45 @@ function App() {
               </p>
               <p className=" text-[#808080] w-[1rem] md:w-[10%] py-2"></p>
             </div>
-            {history.map((his, index) => (
-              <div
-                key={index}
-                className="flex cursor-pointer hover:bg-hoverColor justify-between py-2 px-[1rem] text-[10px] md:text-[12px] lg:text-[14px] border-b  text-secondary items-center"
-              >
-                <p className="w-[25%] md:w-[20%]  shrink-0 ">{his.product}</p>
-                <p className="w-[10%] md:w-[10%]  shrink-0">{his.business}</p>
-                <p className="w-[10%] md:w-[15%] shrink-0 capitalize">
-                  {his.clientId}
-                </p>
-                <p
-                  className={`w-fit shrink-0 r capitalize px-[10px] p-[5px] flex items-center border rounded-lg ${
-                    his.status === "active"
-                      ? "bg-[#bef2b941] border-[#BEF2B9] text-[green]"
-                      : "bg-[#f4b7b557] text-[#A4251A] border-[#F4B7B5]"
-                  }`}
-                >
-                  <FontAwesomeIcon
-                    className="text-[8px] mr-[10px]"
-                    icon={faCircle}
-                  />
-                  {his.status}
-                </p>
-                <p className="w-fit shrink-0 text-primary md:w-[10%]">Edit</p>
-              </div>
-            ))}
+            {isLoading ? (
+              <TableLoader line={10} />
+            ) : (
+              data?.body?.content?.map(
+                (his: (typeof history)[0], index: number) => (
+                  <div
+                    key={index}
+                    className="flex cursor-pointer hover:bg-hoverColor justify-between py-2 px-[1rem] text-[10px] md:text-[12px] lg:text-[14px] border-b  text-secondary items-center"
+                  >
+                    <p className="w-[25%] md:w-[20%]  shrink-0 ">{his?.name}</p>
+                    <p className="w-[10%] md:w-[10%]  shrink-0">
+                      {his?.businessId}
+                    </p>
+                    <p className="w-[10%] md:w-[15%] shrink-0 capitalize">
+                      {his?.passportId}
+                    </p>
+                    <p
+                      className={`w-fit shrink-0 r capitalize px-[10px] p-[5px] flex items-center border rounded-lg ${
+                        his?.active
+                          ? "bg-[#bef2b941] border-[#BEF2B9] text-[green]"
+                          : "bg-[#f4b7b557] text-[#A4251A] border-[#F4B7B5]"
+                      }`}
+                    >
+                      <FontAwesomeIcon
+                        className="text-[8px] mr-[10px]"
+                        icon={faCircle}
+                      />
+                      {his?.active ? "Active" : "Inactive"}
+                    </p>
+                    <button
+                      onClick={() => editProd(his)}
+                      className="w-fit shrink-0 text-primary md:w-[10%]"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                )
+              )
+            )}
           </div>
         </div>
       </div>

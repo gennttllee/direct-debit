@@ -8,6 +8,7 @@ import AddProduct from "./AddProduct";
 import ExportData from "./ExportData";
 import EditBusiness from "./EditBusiness";
 import AddBusiness from "./AddBusiness";
+import EditProduct from "./EditProduct";
 
 const modals = [
   {
@@ -25,6 +26,10 @@ const modals = [
   {
     name: "addBusiness",
     component: <AddBusiness />,
+  },
+  {
+    name: "EditProduct",
+    component: <EditProduct />,
   },
 ];
 
